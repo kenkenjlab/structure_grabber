@@ -19,31 +19,31 @@ Grabber for [Structure Sensor](http://structure.io/) (Depth and Infrared) using 
 
 1. Include "structure_grabber.h".
 2. To start, write:
-  StructureGrabber grabber;
-  grabber.open();
+    StructureGrabber grabber;
+    grabber.open();
 3. To capture, write:
-  grabber.acquire();
+    grabber.acquire();
 4. To get raw data, write:
-  unsigned short *depth_data, *infrared_data;
-  grabber.copyDepthDataTo(depth_data);
-  grabber.copyInfraredDataTo(infrared_data);
+    unsigned short *depth_data, *infrared_data;
+    grabber.copyDepthDataTo(depth_data);
+    grabber.copyInfraredDataTo(infrared_data);
   
 ### With OpenCV
 
 1. Include OpenCV headers before including "structure_grabber.h".
 2. To get `IplImage` or `cv::Mat`, write:
-  cv::Mat depth_image, infrared_image;
-  grabber.acquire();
-  grabber.copyDepthImageTo(depth_image);
-  grabber.copyInfraredImageTo(infrared_image)
+    cv::Mat depth_image, infrared_image;
+    grabber.acquire();
+    grabber.copyDepthImageTo(depth_image);
+    grabber.copyInfraredImageTo(infrared_image)
 
 ### With PCL
 
 1. Include PCL headers before including "structure_grabber.h".
 2. To get `pcl::PointCloud`, write:
-  pcl::PointCloud<pcl::PointXYZ> cloud;
-  grabber.acquire();
-  grabber.copyPointCloudTo(cloud);
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    grabber.acquire();
+    grabber.copyPointCloudTo(cloud);
 
 
 &copy; 2014 kenken.
