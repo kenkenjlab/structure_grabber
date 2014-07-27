@@ -3,10 +3,10 @@
  */
 
 #ifndef STRUCTURE_GRABBER_VERSION
-#define STRUCTURE_GRABBER_VERSION 2014062601
+#define STRUCTURE_GRABBER_VERSION 2014072601
 
 // ------------------------------------------
-//		Includes ((>É÷<))
+//		Includes
 // ------------------------------------------
 
 #include "oni2_grabber.h"
@@ -15,7 +15,7 @@
 #include <iostream>
 
 // ------------------------------------------
-//		Classes ((>É÷<))
+//		Classes
 // ------------------------------------------
 
 class StructureGrabber : public Oni2Grabber {
@@ -49,17 +49,17 @@ public:
 
 #ifdef OPENNI2_GRABBER_USE_OPENCV
 public:
-	int copyDepthImageTo(IplImage *image) {
-		if(image == nullptr)
-			image = cvCreateImage(cvSize(getWidth(), getHeight()), IPL_DEPTH_8U, 1);
+	int copyDepthImageTo(IplImage **image) {
+		if(*image == nullptr)
+			*image = cvCreateImage(cvSize(getWidth(), getHeight()), IPL_DEPTH_8U, 1);
 
-		return copyDepthDataTo(reinterpret_cast<unsigned char*>(image->imageData));
+		return copyDepthDataTo(reinterpret_cast<unsigned char*>((*image)->imageData));
 	}
-	int copyInfraredImageTo(IplImage *image) {
-		if(image == nullptr)
-			image = cvCreateImage(cvSize(getWidth(), getHeight()), IPL_DEPTH_8U, 1);
+	int copyInfraredImageTo(IplImage **image) {
+		if(*image == nullptr)
+			*image = cvCreateImage(cvSize(getWidth(), getHeight()), IPL_DEPTH_8U, 1);
 
-		return copyInfraredDataTo(reinterpret_cast<unsigned char*>(image->imageData));
+		return copyInfraredDataTo(reinterpret_cast<unsigned char*>((*image)->imageData));
 	}
 #endif	// End of #ifdef OPENNI2_GRABBER_USE_OPENCV
 
@@ -86,7 +86,7 @@ public:
 
 
 // ------------------------------------------
-//		Template Methods ((>É÷<))
+//		Template Methods
 // ------------------------------------------
 
 #ifdef OPENNI2_GRABBER_USE_PCL
