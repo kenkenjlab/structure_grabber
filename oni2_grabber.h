@@ -11,6 +11,7 @@
 
 // STL
 #include <vector>
+#include<string>
 
 // OpenNI2
 #include <OpenNI.h>

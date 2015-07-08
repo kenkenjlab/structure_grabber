@@ -3,14 +3,27 @@
 // ------------------------------------------
 
 #include <iostream>
+#include <string>
+#include <sstream>
+
 #include <opencv2/opencv.hpp>
+
 #include "structure_grabber.h"	// Include OpenCV headers before this inclusion if you want to capture images
+
+
 
 // ------------------------------------------
 //		Entry Point ((>É÷<))
 // ------------------------------------------
 
 int main(int argc, char** argv) {
+
+
+	//Variables
+	int frames_saved = 0;
+	std::stringstream out;
+	std::string name;
+
 	// (1) Open OpenNI2 device
 	StructureGrabber grabber;
 	grabber.setDebugMode();
@@ -29,8 +42,8 @@ int main(int argc, char** argv) {
 	cv::Mat infrared_image(image_size, CV_8UC1, cv::Scalar::all(0));
 	
 	// (3) Iterate
-	int key(0);
-	while(key != 'q' && key != 27) {
+	int key;
+	while(key != 'q' && key != 27){ // Break if q or ESC was pressed
 		// (3-1) Acquire new frame
 		grabber.acquire();
 
@@ -51,29 +64,36 @@ int main(int argc, char** argv) {
 		// (3-5) Visualize
 		cv::imshow("Depth", depth_image);
 		cv::imshow("Infrared", infrared_image);
-		key = cv::waitKey(10);
 
 		// (3-6) Save
-		switch(key) {
-		case 's':
-			std::cout << "Saving...";
-			cv::imwrite("capture_depth.png", depth_image);
-			cv::imwrite("capture_infrared.png", infrared_image);
-			std::cout << "done" << std::endl;
-			break;
-		case 'v':
-			std::cout << "Started recording" << std::endl;
-			grabber.startRecording("capture.oni");
-			break;
-		case 'n':
-			std::cout << "Stopped recording" << std::endl;
-			grabber.stopRecording();
-			break;
-		default:
-			break;
+		key = cv::waitKey(1) & 255;
+		switch(key){
+			case 's': 
+				std::cout << "Saving frame " << frames_saved << "...\n";
+				out << frames_saved; 
+                		name = "capture_depth" + out.str() + ".png"; 
+				cv::imwrite(name, depth_image);
+                		name = "capture_infrared" + out.str() + ".png"; 
+				cv::imwrite(name, infrared_image);
+				std::cout << "done" << std::endl;
+                                out.str(std::string());
+				name.clear();
+				frames_saved++;
+				break;
+			case 'v': 
+				std::cout << "Started recording" << std::endl;
+				grabber.startRecording("capture.oni");
+				break;
+			case 'n': 
+				std::cout << "Stopped recording" << std::endl;
+				grabber.stopRecording();
+				break;
+			default:
+				break;	
+				
+				
 		};
 	}
-
 	// (4) Close OpenNI2 device
 	grabber.close();
 	return 0;
