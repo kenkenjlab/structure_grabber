@@ -3,7 +3,11 @@
 // ------------------------------------------
 
 #include <iostream>
+#include <string>
+#include <sstream>
+
 #include <opencv2/opencv.hpp>
+
 #include "structure_grabber.h"	// Include OpenCV headers before this inclusion if you want to capture images
 
 // ------------------------------------------
@@ -19,6 +23,10 @@ void convertHSV2RGB(float h, float s, float v, float &r, float &g, float &b);
 // ------------------------------------------
 
 int main(int argc, char** argv) {
+	//Variables
+	int frames_saved = 0;
+	std::stringstream out;
+	std::string name;
 	// (1) Open OpenNI2 device
 	StructureGrabber grabber;
 	grabber.setDebugMode();
@@ -48,8 +56,9 @@ int main(int argc, char** argv) {
 	cv::Mat infrared_image(image_size, CV_8UC1, cv::Scalar::all(0));
 	
 	// (3) Iterate
-	int key(0);
-	while(key != 'q' && key != 27) {	// Break if q or ESC was pressed
+	int key;
+	while(key != 'q' && key != 27) {	// Break if q or ESC was pressed	
+		key = cv::waitKey(1) & 255;
 		// (3-1) Acquire new frame
 		grabber.acquire();
 
@@ -64,7 +73,19 @@ int main(int argc, char** argv) {
 
 		// (3-4) Visualize
 		cv::imshow("Depth [Colored]", colored_depth_image);
-		key = cv::waitKey(1);
+
+		// (3-5) Save
+		if(key == 's'){	
+			std::cout << "Saving frame " << frames_saved << "...\n";
+			out << frames_saved; 
+                	name = "capture_depth_color" + out.str() + ".png"; 
+			cv::imwrite(name, infrared_image);
+			std::cout << "done" << std::endl;
+                        out.str(std::string());
+			name.clear();
+			frames_saved++;
+		}
+		
 	}
 
 	// (4) Close OpenNI2 device

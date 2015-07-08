@@ -3,10 +3,14 @@
 // ------------------------------------------
 
 #include <iostream>
+#include <string>
+#include <sstream>
+
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
+
 #include "structure_grabber.h"	// Include PCL headers before this inclusion if you want to capture point clouds
 
 // ------------------------------------------
@@ -21,6 +25,8 @@ void keyboardCallback (const pcl::visualization::KeyboardEvent &event);
 // ------------------------------------------
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+int frames_saved = 0;
+ 
 
 // ------------------------------------------
 //		Entry Point ((>É÷<))
@@ -43,7 +49,6 @@ int main(int argc, char** argv) {
 	viewer.addPointCloud(cloud);
 
 	// (3) Iterate
-	int key(0);
 	while(!viewer.wasStopped()) {
 		// (3-1) Acquire new frame
 		grabber.acquire();
@@ -75,9 +80,14 @@ void initViewer(pcl::visualization::PCLVisualizer &viewer) {
 }
 
 void keyboardCallback(const pcl::visualization::KeyboardEvent &event) {
-	if(event.getKeySym() == "v" && event.keyUp()) {
-		std::cout << "Saving...";
-		pcl::io::savePCDFile("capture.pcd", *cloud);
+	std::stringstream out;
+	std::string name;
+	if(event.getKeySym() == "s" && event.keyUp()) {
+		std::cout << "Saving frame " << frames_saved << "...\n";
+                out << frames_saved; 
+                name = "InputCloud" + out.str() + ".pcd"; 
+		pcl::io::savePCDFile(name, *cloud);
 		std::cout << "done" << std::endl;
+                frames_saved++;
 	}
 }
