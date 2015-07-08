@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0015 OLD)	#// Do not add relative path if the designated path is not exist
 add_definitions(-DUNICODE -D_UNICODE)	#// Set Unicode, not MultiBytes
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 
 
 #### Solution Settings ####		* MODIFY HERE*
@@ -45,4 +45,6 @@ target_link_libraries(structure_colored_depth_image_viewer ${OPENNI2_LIB} ${Open
 add_executable(structure_point_cloud_viewer structure_point_cloud_viewer.cpp ${STRUCTURE_GRABBER})
 target_link_libraries(structure_point_cloud_viewer ${OPENNI2_LIB} ${OpenCV_LIBS} ${PCL_LIBRARIES})
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
